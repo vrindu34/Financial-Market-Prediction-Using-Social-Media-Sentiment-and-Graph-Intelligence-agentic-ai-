@@ -1,0 +1,7 @@
+twitter_processed.csv
+twitter_sentiment_cache.csv
+reddit_sentiment_cache.csv
+*.pyc
+__pycache__/
+.env
+.DS_Store
