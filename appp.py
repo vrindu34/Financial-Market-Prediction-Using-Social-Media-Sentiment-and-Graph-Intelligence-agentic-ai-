@@ -11,7 +11,16 @@ nltk.download("vader_lexicon", quiet=True)
 from nltk.sentiment import SentimentIntensityAnalyzer
 
 sia = SentimentIntensityAnalyzer()
-
+TICKER_TO_NAME = {
+    "AAPL": "Apple", "AMZN": "Amazon", "GOOGL": "Google", "GOOG": "Google",
+    "META": "Facebook", "FB": "Facebook", "NFLX": "Netflix", "DIS": "Disney",
+    "TSLA": "Tesla", "MSFT": "Microsoft", "SBUX": "Starbucks", "NKE": "Nike",
+    "PYPL": "PayPal", "F": "Ford", "TWTR": "Twitter", "SNAP": "Snap",
+    "UBER": "Uber", "LYFT": "Lyft", "AMGN": "Amgen", "JPM": "JPMorgan",
+    "BAC": "Bank of America", "WMT": "Walmart", "TGT": "Target",
+    "COST": "Costco", "HD": "Home Depot", "MCD": "McDonald",
+    "NXST": "Next", "GE": "General Electric",
+}
 st.title("Agentic AI Financial Prediction System")
 
 # ─────────────────────────────────────────────
@@ -66,12 +75,26 @@ reddit, twitter = load_all_data()
 # ─────────────────────────────────────────────
 
 def mean_sentiment(df, stock_upper):
+    # Try direct ticker match first
     col = next(
         (c for c in df.columns if c.lower() in ["stock", "symbol", "ticker"]), None
     )
-    if col:
-        filtered = df[df[col].astype(str).str.upper() == stock_upper]
-        return filtered["sentiment"].mean() if len(filtered) > 0 else df["sentiment"].mean()
+    if col is None:
+        return df["sentiment"].mean()
+
+    # Try ticker directly
+    filtered = df[df[col].astype(str).str.upper() == stock_upper]
+    if len(filtered) > 0:
+        return filtered["sentiment"].mean()
+
+    # Try company name mapping
+    company_name = TICKER_TO_NAME.get(stock_upper)
+    if company_name:
+        filtered = df[df[col].astype(str).str.lower() == company_name.lower()]
+        if len(filtered) > 0:
+            return filtered["sentiment"].mean()
+
+    # Fallback to global average
     return df["sentiment"].mean()
 
 
