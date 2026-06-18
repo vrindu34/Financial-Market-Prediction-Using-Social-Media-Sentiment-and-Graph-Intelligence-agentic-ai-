@@ -50,8 +50,8 @@ def load_with_sentiment(raw_path, cache_path):
 
 @st.cache_resource
 def load_all_data():
-    reddit  = load_with_sentiment("https://drive.google.com/uc?export=download&id=1eMiZ-xuq9SX8QSkOnx-7ZH8BTFn-BsL1",  "reddit_sentiment_cache.csv")
-    twitter = load_with_sentiment("https://drive.google.com/uc?export=download&id=1SOd9C2J6VeLU2rXiawOud0g9fktbQwCZ", "twitter_sentiment_cache.csv")
+    reddit  = load_with_sentiment("reddit_processed.csv",  "reddit_sentiment_cache.csv")
+    twitter = load_with_sentiment("https://huggingface.co/datasets/vrindu34/agentic-ai-sentiment-data/blob/main/twitter_sentiment_cache.csv", "twitter_sentiment_cache.csv")
     return reddit, twitter
 
 
