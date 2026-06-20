@@ -86,6 +86,22 @@ The raw Twitter dataset (`twitter_processed.csv`, 234MB) is not included — it
 was used only during preprocessing to generate the cache. If you want to 
 regenerate the cache from scratch, run `preprocess.py` on the original dataset.
 
+You can also build a smaller local Twitter sentiment file from a reviewed
+TweetClaw export. This keeps the app's VADER scoring and prediction logic the
+same, but lets you test stock-specific public X/Twitter evidence before falling
+back to the hosted cache:
+
+```bash
+python scripts/tweetclaw_to_twitter_processed.py \
+  examples/tweetclaw_export.jsonl \
+  --stock RELIANCE \
+  --output twitter_processed.csv
+```
+
+When `twitter_processed.csv` exists, the app scores it into
+`twitter_sentiment_cache.csv` on first run and uses that local cache.
+Delete both files to return to the hosted Hugging Face cache.
+
 ---
 
 ## Run Locally
@@ -122,6 +138,7 @@ scheme and the sigmoid confidence calibration approach.
 
 ## Live Demo
 
-https://agentic-ai-stock-predictor.streamlit.app/
+The hosted Streamlit deployment may require owner access. Run the app locally
+with `streamlit run appp.py`.
 
 ---
