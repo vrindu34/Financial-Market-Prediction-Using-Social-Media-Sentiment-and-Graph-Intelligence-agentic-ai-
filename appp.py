@@ -60,11 +60,17 @@ def load_with_sentiment(raw_path, cache_path):
 @st.cache_resource
 def load_all_data():
     reddit = pd.read_csv("reddit_sentiment_cache.csv")
-    
-    twitter = pd.read_csv(
-        "https://huggingface.co/datasets/vrindu34/agentic-ai-sentiment-data/resolve/main/twitter_sentiment_cache.csv",
-        low_memory=False
-    )
+
+    if os.path.exists("twitter_processed.csv"):
+        twitter = load_with_sentiment(
+            "twitter_processed.csv",
+            "twitter_sentiment_cache.csv",
+        )
+    else:
+        twitter = pd.read_csv(
+            "https://huggingface.co/datasets/vrindu34/agentic-ai-sentiment-data/resolve/main/twitter_sentiment_cache.csv",
+            low_memory=False
+        )
     
     return reddit, twitter
 
